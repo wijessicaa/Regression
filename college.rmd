@@ -1,0 +1,23 @@
+# Loading the data
+library(collegeIncome)
+library(matahari)
+data(college)
+dance_start(value = FALSE, contents = FALSE)
+head(college)
+college <- college[order(college$major_category),]
+
+# dividing and plotting the data
+library(ggplot2)
+library(dplyr)
+major_category <- unique(college$major_category)
+major_category
+college2<- college %>% group_by(major_category) %>% summarize(mean(perc_employed, na.rm = T))
+names(college2) <- c("major_category", "perc_employed")
+boxplot(college$median ~ factor(college$major_category))
+
+# linear regression on the data
+fit<- lm(median~major_category,college)
+summary(fit)$coef
+par(mfrow = c(2,2) )
+plot(fit)
+
